@@ -8,4 +8,4 @@ Route::get('/', function () {
 });
 
 // Fazendo uma rota se comunicar com um controller
-Route::get('/main', [MainController::class, 'index']);
+Route::get('/main/{value}', [MainController::class, 'index']);
