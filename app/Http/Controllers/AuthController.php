@@ -57,7 +57,8 @@ class AuthController extends Controller
             ]
         ]);
 
-        echo 'Olá, ' . $username . ' seja bem vindo.';
+        // redirect to home
+        return redirect('/');
 
     }
 
