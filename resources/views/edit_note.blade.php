@@ -11,7 +11,7 @@
             <!-- label and cancel -->
             <div class="row">
                 <div class="col">
-                    <p class="display-6 mb-0">NEW NOTE</p>
+                    <p class="display-6 mb-0">EDIT NOTE</p>
                 </div>
                 <div class="col text-end">
                     <a href=" {{ route('home') }} " class="btn btn-outline-danger">
@@ -23,6 +23,7 @@
             <!-- form -->
             <form action="{{ route('editNoteSubmit') }}" method="post">
                 @csrf
+                <input type="hidden" name="note_id" value="{{ Crypt::encrypt($note['id']) }}">
                 <div class="row mt-3">
                     <div class="col">
                         <div class="mb-3">

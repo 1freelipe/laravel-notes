@@ -35,7 +35,7 @@ class MainController extends Controller
             // error messages
             'text_title.required' => 'O título é obrigatório',
             'text_title.min' => 'O título precisa ter no mínimo :min caracteres.',
-            'text_title:max' => 'O título precisa ter no máximo :max caracteres.',
+            'text_title.max' => 'O título precisa ter no máximo :max caracteres.',
             'text_note.required' => 'A descrição da nota é obrigatório.',
             'text_note.min' => 'A descrição precisa ter no mínimo :min caracteres.',
             'text_note.max' => 'A descrição precisa ter no máximo :max caracteres.',
@@ -68,6 +68,43 @@ class MainController extends Controller
 
         // show edit notes view
         return view('edit_note', ['note' => $note]);
+    }
+
+    public function editNoteSubmit(Request $request) {
+        // validate request
+        $request->validate([
+            // rules
+            'text_title' => 'required|min:3|max:200',
+            'text_note' => 'required|min:3|max:3000',
+        ], [
+            // erros messages
+            'text_title.required' => 'O título é obrigatório',
+            'text_title.min' => 'O título precisa ter no mínimo :min caracteres.',
+            'text_title.max' => 'O título precisa ter no máximo :max caracteres.',
+            'text_note.required' => 'A descrição é obrigatória.',
+            'text_note.min' => 'A descrição precisa ter no mínimo :min caracteres.',
+            'text_note.max' => 'A descrição precisa ter no máximo :max caracteres.',
+        ]);
+
+        // check if note_id exists
+        if($request->note_id == null) {
+            redirect()->route('home');
+        }
+
+        // descrypt note_id
+        $note_id = Operations::decryptId($request->note_id);
+
+        // load note
+        $upNote = Note::find($note_id);
+
+        // update note
+        $upNote->title = $request->input('text_title');
+        $upNote->text = $request->input('text_note');
+        // $upNote->updated_at = date('Y-m-d H:i:s');
+        $upNote->save();
+
+        // redirect to home
+        return redirect()->route('home');
     }
 
     // delete note

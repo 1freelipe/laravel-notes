@@ -11,7 +11,7 @@
             <!-- label and cancel -->
             <div class="row">
                 <div class="col">
-                    <p class="display-6 mb-0">EDIT NOTE</p>
+                    <p class="display-6 mb-0">NEW NOTE</p>
                 </div>
                 <div class="col text-end">
                     <a href=" {{ route('home') }} " class="btn btn-outline-danger">
