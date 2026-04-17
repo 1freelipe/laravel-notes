@@ -5,16 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use App\Models\User;
 use App\services\Operations;
-use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Laravel\Prompts\Note as PromptsNote;
 
 class MainController extends Controller
 {
     public function index() {
         // load users notes
         $id = session('user.id');
-        $notes = User::find($id)->notes()->get()->toArray();
+        $notes = User::find($id)->notes()->whereNull('deleted_at')->get()->toArray();
 
         // show home view
         return view('home', ['notes' => $notes]);
@@ -110,6 +110,36 @@ class MainController extends Controller
     // delete note
     public function deleteNote($id) {
         $id = Operations::decryptId($id);
-        echo $id;
+
+        $note = Note::find($id);
+
+        return view('confirm_delete', ['note' => $note]);
+    }
+
+    public function deleteNoteConfirm($id) {
+        $note_id = Operations::decryptId($id);
+
+        // load note
+        $note = Note::find($note_id);
+
+        // 1. hard delete
+        // $note->delete($note_id);
+
+        // 2. soft delete
+        // $note->deleted_at = date('Y-m-d H:i:s');
+        // $note->save();
+
+        // 3. soft delete by model
+        $note->delete($note_id);
+
+        // redirect from home
+        return redirect()->route('home');
+    }
+
+    public function showDeletedNotes() {
+        $user_id = session('user.id');
+        $notes = User::find($user_id)->notes()->onlyTrashed()->get();
+
+        return view('deleted_notes', ['notes' => $notes]);
     }
 }

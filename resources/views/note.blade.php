@@ -5,7 +5,9 @@
                             <div class="col">
                                 <h4 class="text-info">{{ $note['title'] }}</h4>
                                 <small class="text-secondary"><span class="opacity-75 me-2">Created at:</span><strong> {{ date('Y-m-d H:i:s', strtotime($note['created_at'])) }} </strong></small>
-                                @if ($note['created_at'] != $note['updated_at'])
+                                @if ($note['deleted_at'] != null)
+                                <small class="text-secondary ms-5"><span class="opacity-75 me-2">Deleted_at:</span><strong> {{ date('Y-m-d H:i:s', strtotime($note['deleted_at'])) }} </strong></small>
+                                @elseif ($note['created_at'] != $note['updated_at'])
                                 <small class="text-secondary ms-5"><span class="opacity-75 me-2">Updated at:</span><strong> {{ date('Y-m-d H:i:s', strtotime($note['updated_at'])) }} </strong></small>
                                 @endif
                             </div>
