@@ -63,6 +63,8 @@ class MainController extends Controller
     public function editNote($id) {
         $id = Operations::decryptId($id);
 
+        if($id == null) return redirect()->route('home');
+
         // load note
         $note = Note::find($id);
 
@@ -94,6 +96,9 @@ class MainController extends Controller
         // descrypt note_id
         $note_id = Operations::decryptId($request->note_id);
 
+        if($note_id == null) return redirect()->route('home');
+
+
         // load note
         $upNote = Note::find($note_id);
 
@@ -111,6 +116,8 @@ class MainController extends Controller
     public function deleteNote($id) {
         $id = Operations::decryptId($id);
 
+        if($id == null) return redirect()->route('home');
+
         $note = Note::find($id);
 
         return view('confirm_delete', ['note' => $note]);
@@ -118,6 +125,8 @@ class MainController extends Controller
 
     public function deleteNoteConfirm($id) {
         $note_id = Operations::decryptId($id);
+
+        if($note_id == null) return redirect()->route('home');
 
         // load note
         $note = Note::find($note_id);
@@ -145,6 +154,9 @@ class MainController extends Controller
 
     public function restoreNote($id) {
         $id = Operations::decryptId($id);
+
+        if($id == null) return redirect()->route('home');
+
         // withTrashed pq essa nota sofreu softdelete
         $note = Note::withTrashed()->find($id);
 
