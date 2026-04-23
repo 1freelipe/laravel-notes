@@ -142,4 +142,15 @@ class MainController extends Controller
 
         return view('deleted_notes', ['notes' => $notes]);
     }
+
+    public function restoreNote($id) {
+        $id = Operations::decryptId($id);
+        // withTrashed pq essa nota sofreu softdelete
+        $note = Note::withTrashed()->find($id);
+
+        // restore note
+        $note->restore($note);
+
+        return redirect()->route('home');
+    }
 }
